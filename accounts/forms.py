@@ -10,7 +10,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.forms import PasswordResetForm
 from course.models import Program
-from .models import User, Student, RELATION_SHIP, LEVEL, GENDERS
+from .models import User, Student, LEVEL, GENDERS
 
 
 class StaffAddForm(UserCreationForm):

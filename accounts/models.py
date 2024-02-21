@@ -20,23 +20,6 @@ LEVEL = (
     (MASTER_DEGREE, "Master Degree"),
 )
 
-FATHER = "Father"
-MOTHER = "Mother"
-BROTHER = "Brother"
-SISTER = "Sister"
-GRAND_MOTHER = "Grand mother"
-GRAND_FATHER = "Grand father"
-OTHER = "Other"
-
-RELATION_SHIP = (
-    (FATHER, "Father"),
-    (MOTHER, "Mother"),
-    (BROTHER, "Brother"),
-    (SISTER, "Sister"),
-    (GRAND_MOTHER, "Grand mother"),
-    (GRAND_FATHER, "Grand father"),
-    (OTHER, "Other"),
-)
 
 
 class CustomUserManager(UserManager):

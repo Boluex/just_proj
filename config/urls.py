@@ -15,7 +15,6 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("programs/", include("course.urls")),
     path("search/", include("search.urls")),
-    path("accounts/api/", include("accounts.api.urls", namespace="accounts-api")),
     path("admin/", admin.site.urls),
     path('chat/',include('chat.urls'))
 ]
