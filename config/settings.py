@@ -194,10 +194,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com" # Gmail as the email host, but you can change it
-EMAIL_PORT = config('PORT')
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('USER_EMAIL')
-EMAIL_HOST_PASSWORD = config('USER_PASSWORD')
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
 
 # crispy config
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

@@ -5,60 +5,168 @@
 
 <div class="col-md-4 mx-auto mt-5">
   <div class="card">
-    <div class="form-title">
+    <div  class="form-title">
       <i class="fas fa-lock me-2"></i>
-      Sign in
+      <div id="form-title">Sign in</div>
     </div>
     <div class="card-body">
-        <form action="" method="POST" id="login-form">{% csrf_token %}
+      <!-- Login Form -->
+      <div id="login-form-container">
+        <form action="" method="POST" id="login-form">
+          {% csrf_token %}
+          <!-- ... (your existing login form HTML) ... -->
+          
           <div class="form-group mb-3">
-              <label class="mb-2" for="username_id"><i class="fas fa-address-card me-2"></i>ID Number</label>
-              <input type="text" name="username" id="username_id" class="form-control" required>
-              <div id="message-wrapper"></div>
+            <label class="mb-2" for="username_id"
+              ><i class="fas fa-address-card me-2"></i>ID Number</label
+            >
+            <input
+              type="text"
+              name="username"
+              id="username_id"
+              class="form-control"
+              required
+            />
+            <div id="message-wrapper"></div>
           </div>
           <div class="form-group mb-3">
-              <label class="mb-2" for="password_id"><i class="fas fa-key me-2"></i>Password</label>
-              <input type="password" name="password" id="password_id" class="form-control" required>
+            <label class="mb-2" for="password_id"
+              ><i class="fas fa-key me-2"></i>Password</label
+            >
+            <input
+              type="password"
+              name="password"
+              id="password_id"
+              class="form-control"
+              required
+            />
           </div>
           {% if form.errors %}
-                <span class="text-danger"><i class="fas fa-exclamation-circle"></i> Invalid ID & Password.</span><br>
+          <span class="text-danger"
+            ><i class="fas fa-exclamation-circle"></i> Invalid ID &
+            Password.</span
+          ><br />
           {% endif %}
-      
-          <div class="btn-group" style="margin-right: 10px;">
+  
+          <div class="btn-group" style="margin-right: 10px">
             <button type="submit" class="btn btn-primary" id="login-btn">
               <i class="fas fa-sign-in-alt"></i> <small>SIGN IN</small>
             </button>
           </div>
+  
+          <!-- <div class="btn-group">
+            <div class="dropdown">
+              <button
+                class="btn btn-primary dropdown-toggle"
+                type="button"
+                id="login-dropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-sign-in-alt"></i> <small>SIGN UP</small>
+              </button>
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="login-dropdown"
+              >
+                <a class="dropdown-item" href="#">Lecturer</a>
+                <a class="dropdown-item" href="#">Student</a>
+              </div>
+            </div> -->
+        </form>
+      </div>
 
-        <div class="btn-group">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="login-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-sign-in-alt"></i> <small>SIGN UP</small>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="login-dropdown">
-              <a class="dropdown-item" href="#">Lecturer</a>
-              <a class="dropdown-item" href="#">Student</a>
-            </div>
+      <!-- Create Account Form (Initially hidden) -->
+      <div id="create-account-form-container" >
+        <form action="" method="POST" id="create-account-form">
+          {% csrf_token %}
+          <!-- ... (your create account form HTML) ... -->
+          <div class="form-check">
+            <input type="radio" id="lecturer" name="userType" value="lecturer" class="form-check-input" required />
+            <label for="lecturer" class="form-check-label">Sign up as a Lecturer</label>
           </div>
-        </div>
-
-        
-
-
+      
+          <div class="form-check">
+            <input type="radio" id="student" name="userType" value="student" class="form-check-input" required />
+            <label for="student" class="form-check-label">Sign up as a Student</label>
+          </div>
+          <div class="btn-group" style="margin-top: 10px">
+            <button type="button" class="btn btn-primary" id="next-btn" onclick="handleNext()">
+              Next
+            </button>
+          </div>
 
         </form>
-        <br>
-        <div class="login-bottom">
-          <a href="{% url 'password_reset' %}" class="link">Forgot password ?</a>
-        </div>
       </div>
+      <div id="lecturer-content" style="display: none;">
+        <!-- Content specific to Lecturer -->
+        Lecturer Content
+      </div>
+      
+      <!-- Content for Student -->
+      <div id="student-content" style="display: none;">
+        <!-- Content specific to Student -->
+        Student Content
+      </div>
+
+      <div class="text-center">
+        <p id="toggle-link">Don't have an account? <a href="#">Create an account</a>.</p>
+      </div>
+      <br />
+      <div class="login-bottom">
+        <a href="{% url 'password_reset' %}" class="link">Forgot password ?</a>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}
 
 {% block js %}
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
+  $(document).ready(function () {
+    // Hide Create Account form initially
+    console.log("jQuery is running")
+    $("#create-account-form-container").hide();
+
+    // Toggle between login and create account forms
+    $("#toggle-link a").click(function (e) {
+      e.preventDefault();
+      $("#login-form-container").toggle();
+      $("#create-account-form-container").toggle();
+
+      // Toggle the form title
+      var currentTitle = $("#form-title").text().trim();
+      var newTitle = currentTitle === "Sign In" ? "Sign Up" : "Sign In";
+      $("#form-title").text(newTitle);
+    });
+    
+  });
+</script>
+<script>
+  function handleNext() {
+    // Retrieve the selected value from the radio inputs
+    const userType = $("input[name='userType']:checked").val();
+
+    // Redirect or perform actions based on the selected user type
+    if (userType === 'lecturer') {
+      // Redirect or show content for lecturer registration
+      window.location.href = '/accounts/register_lecturer/';
+    } else if (userType === 'student') {
+      // Redirect or show content for student registration
+      window.location.href = '/accounts/register_student/';
+    } else {
+      // Handle other cases or provide an error message
+      alert('Invalid selection');
+    }
+  }
+   $('#register-form').submit(function (e) {
+    // e.preventDefault();
+    $('#register-btn').addClass('disabled')
+    $('#register-btn').html(`<i class="fas fa-sign-in-alt"></i> Saving details . . .`)
+  })
+
   $('#login-form').submit(function (e) {
     // e.preventDefault();
     $('#login-btn').addClass('disabled')
