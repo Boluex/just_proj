@@ -179,13 +179,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com" # Gmail as the email host, but you can change it
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-<<<<<<< HEAD
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
-=======
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
->>>>>>> 6fccfcb66b4c904b2c2dfee2452d8d51fd1eb7ec
 
 # crispy config
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
