@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | Learning management system{% endblock title %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'programs' %}">Programs</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Course Form</li>
+    </ol>
+</nav>
+
+<div class="title-1">Course Form</div>
+<br>
+<br>
+
+{% include 'snippets/messages.html' %}
+
+<form action="" method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <p class="form-title">Course Detail</p>
+                <div class="p-3">
+                    {{ form.title|as_crispy_field }}
+                    {{ form.code|as_crispy_field }}
+                    {{ form.summary|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <p class="form-title">Other Info</p>
+                <div class="p-3">
+                    {{ form.program|as_crispy_field }}
+                    {{ form.credit|as_crispy_field }}
+                    {{ form.year|as_crispy_field }}
+                    {{ form.semester|as_crispy_field }}
+                    {{ form.level|as_crispy_field }}
+                    {{ form.is_elective|as_crispy_field }}
+
+
+                    <div class="input-group">
+                        <input type="text" name="session" class="form-control" id="sessionInput" readonly>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Session
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- Add your Session options here dynamically -->
+                            <li class="dropdown-item" onclick="selectSession('First')">First</li>
+                            <li class="dropdown-item" onclick="selectSession('Second')">Second</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Hidden input to store the selected session -->
+                    <input type="hidden" id="selectedSession">
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+    <input class="btn btn-primary mt-3" type="submit" value="Save">
+</form>
+<script>
+    function selectSession(session) {
+        // Update the input field with the selected session
+        document.getElementById('sessionInput').value = session;
+
+        // Store the selected session in the hidden input
+        document.getElementById('selectedSession').value = session;
+    }
+</script>
+
+{% endblock content %}

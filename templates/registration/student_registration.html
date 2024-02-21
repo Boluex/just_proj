@@ -1,0 +1,79 @@
+{% extends 'registration/registration_base.html' %}
+{% block title %}Dj Learning Management System - Login{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="col-md-4 mx-auto mt-5">
+  <div class="card">
+    <div class="form-title">
+      <i class="fas fa-lock me-2"></i>
+      Student Registration
+    </div>
+    <div class="card-body">
+        <form action="" method="POST" id="register-form">{% csrf_token %}
+          <div class="form-group mb-3">
+              <label class="mb-2" for="first_name_id"><i class="fas fa-address-card me-2"></i>{{ form.first_name.label }}</label>
+              {{ form.first_name }}
+              <div id="message-wrapper"></div>
+          </div>
+          <div class="form-group mb-3">
+              <label class="mb-2" for="last_name_id"><i class="fas fa-address-card me-2"></i>{{ form.last_name.label }}</label>
+              {{ form.last_name }}
+              <div id="message-wrapper"></div>
+          </div>
+          <div class="form-group mb-3">
+              <label class="mb-2" for="last_name_id"><i class="fas fa-address-card me-2"></i>{{ form.gender.label }}</label>
+              {{ form.gender }}
+              <div id="message-wrapper"></div>
+          </div>
+          <div class="form-group mb-3">
+              <label class="mb-2" for="email_id"><i class="fas fa-key me-2"></i>{{ form.email.label }}</label>
+              {{ form.email }}
+          </div>
+          <div class="form-group mb-3">
+              <label class="mb-2" for="addr-id"><i class="fas fa-key me-2"></i>{{ form.address.label }}</label>
+             {{ form.address }}
+          </div>
+          <div class="form-group mb-3">
+              <label class="mb-2" for="no_id"><i class="fas fa-key me-2"></i>{{ form.phone.label }}</label>
+              {{ form.phone }}
+          </div>
+           <div class="form-group mb-3">
+              <label class="mb-2" for="no_id"><i class="fas fa-key me-2"></i>{{ form.program.label }}</label>
+              {{ form.program }}
+          </div>
+           <div class="form-group mb-3">
+              <label class="mb-2" for="no_id"><i class="fas fa-key me-2"></i>{{ form.level.label }}</label>
+              {{ form.level }}
+          </div>
+          {% if messages %}
+                <span class="text-danger"><i class="fas fa-exclamation-circle"></i> {{ messages }}</span><br>
+          {% endif %}
+      
+          <!-- <button type="submit" class="btn btn-primary" id="login-btn"><i class="fas fa-sign-in-alt"></i><small> SIGN IN</small></button> -->
+          <div class="btn-group" style="margin-right: 10px;">
+            <button type="submit" class="btn btn-primary" id="register-btn">
+              <i class="fas fa-sign-in-alt"></i> <small>Save</small>
+            </button>
+          </div>
+
+    
+
+        </form>
+        <br>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+
+<script>
+  $('#register-form').submit(function (e) {
+    // e.preventDefault();
+    $('#register-btn').addClass('disabled')
+    $('#register-btn').html(`<i class="fas fa-sign-in-alt"></i> Saving details . . .`)
+  })
+
+</script>
+{% endblock %}
+

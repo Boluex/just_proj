@@ -1,0 +1,15 @@
+Roles of the users:
+Admin:
+-Controls and monitor all functionality in the application
+-Create,add,modify,update and delete both students and Lecturers
+-Allocate courses to leacturers
+-Can only create,modify,update and delete course program
+
+
+
+
+Lecturer:
+-Can only create,modify,update and delete Courses
+-Set quiz to his/her assigned course
+-Can allocate other lecturers to his assigned course
+-Can check list of his course and the amount of students who has taken his/her course

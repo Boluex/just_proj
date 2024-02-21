@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}Learning management system{% endblock title %}
+
+{% load class_name %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .chat-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: calc(100% - 40px);
+        height: 80%;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-messages {
+        flex: 1;
+        list-style: none;
+        padding: 20px;
+        margin: 0;
+        /* width: 100%; */
+        overflow-y: auto;
+        align-items: center;
+    }
+
+    .chat-message {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(78, 81, 105, 0.685);
+        border-radius: .5rem;
+        max-width :250px; 
+        padding: 5px;
+    }
+    
+
+    .chat-message .username {
+        font-weight: bold;
+        margin-right: 5px;
+        color: #000000;
+    }
+
+    /*  */
+    .chat-message.self {
+        justify-content: flex-end;
+        background-color: rgb(117, 114, 119);
+        /* align-items: flex-end; */
+        margin-left: auto;
+
+    }
+
+    .user-message {
+        justify-content: flex-end;
+    }
+
+    
+
+    .chat-input {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #ccc;
+        box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+
+    .chat-input button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    .chat-input button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="chat-wrapper">
+    
+    <ul class="chat-messages" id="chat-messages">
+        {% for message in messages %}
+        <li class="chat-message {% if message.sender.username == request.user.username %}self{% endif %}">
+            <span class="username" >{{ message.sender.username }}:</span>
+            <span class="message-content">{{ message.content }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="chat-input">
+        <input type="text" id="message-input" placeholder="Type your message..." onkeypress="sendMessageOnEnter(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<!-- Render the user's username and the chat room name as JSON variables -->
+{{ request.user.username|json_script:"user_username" }}
+{{ room_name|json_script:"room-name" }}
+
+<script>
+    const user_username = JSON.parse(document.getElementById('user_username').textContent);
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    function sendMessage() {
+        const messageInput = document.getElementById("message-input");
+        const message = messageInput.value.trim();
+
+        if (message !== "") {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user_username,
+            }));
+            messageInput.value = '';
+        }
+    }
+
+    document.querySelector('#message-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    const chatSocket = new WebSocket(
+        'ws://' +
+        window.location.host +
+        '/ws/chat/' +
+        roomName +
+        '/'
+    );
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        const chatMessages = document.querySelector('.chat-messages');
+        const messageElement = document.createElement('li');
+        messageElement.className = 'chat-message';
+        const usernameElement = document.createElement('span');
+        usernameElement.className = 'username';
+        usernameElement.innerText = data.username + ': '; // Added colon after username
+        const messageContent = document.createElement('span');
+        messageContent.className = 'message-content';
+        messageContent.innerText = data.message;
+        messageElement.appendChild(usernameElement);
+        messageElement.appendChild(messageContent);
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+    };
+</script>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+{% endblock content %}
