@@ -94,10 +94,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # 'django.template.context_processors.i18n',
-                # 'django.template.context_processors.media',
-                # 'django.template.context_processors.static',
-                # 'django.template.context_processors.tz',
             ],
         },
     },
@@ -118,19 +114,6 @@ DATABASES = {
     }
 }
 
-# -----------------------------
-# NOTE: Some model fields may not work on sqlite db,
-# so consider using postgresql instead
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": config("DB_NAME"),
-#         "USER": config("DB_USER"),
-#         "PASSWORD": config("DB_PASSWORD"),
-#         "HOST": config("DB_HOST", default="localhost"),
-#         "PORT": config("DB_PORT", default=5432),
-#     }
-# }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -245,10 +228,6 @@ LOGGING = {
 # WhiteNoise configuration
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-CORS_ALLOWED_ORIGINS = [
-    "https://756f-212-100-77-73.ngrok-free.app",
-    # ... other allowed origins ...
-]
 
 ASGI_APPLICATION='config.routing.application'
 CHANNEL_LAYERS={
