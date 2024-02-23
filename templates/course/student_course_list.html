@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %} My Courses | Learning management system{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Students Enrolled</li>
+    </ol>
+</nav>
+
+{% if request.user.is_lecturer %}
+    <div class="title-1">Enrolled Student</div>
+    <div class="table-shadow">
+         <div class="p-3">
+                <form action="{% url 'add_student' %}" method="POST">{% csrf_token %}
+                        <div class="form-group">
+                            <input  type="text" name="username" placeholder="Add a student" >
+                            <input type="hidden" name="id" value="{{student.course.pk}}" >
+
+                        </div>
+        
+
+                    <input class="btn btn-outline-primary" type="submit" value="Add">
+                </form>
+            </div>
+        <table class="table table-light">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th> Student Name </th>
+                    <th> Course Title </th>
+                    <th> Course Code </th>\
+                     {% if request.user.is_lecturer %}
+                    <th>Action</th>
+                    {% endif %}
+                 
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}.<td>{{ student.student.student.username }}</td>
+                    <td>{{ student.course.title }}</td>
+                    <td>{{ student.course.code }}</td>
+                     {% if request.user.is_lecturer %}
+                        <td>
+                            <div class="dropstart">
+                                <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" 
+                                data-bs-boundary="window" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v m-0"></i>
+                                </button>
+                                <div class="dropdown-menu position-fixed">
+                                    <a class="dropdown-item" href="{% url 'remove_student' student.student.student.username student.course.pk  %}">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i>{{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>{{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+
+{% if courses.paginator.page_range|length > 1 %}
+<div class="content-center">
+    <div class="pagination">
+        <a href="?page=1">&laquo;</a>
+        {% for i in courses.paginator.page_range %}
+            {% if i == courses.number %}
+                <a class="pagination-active" href="?page={{ i }}"><b>{{ i }}</b></a>
+            {% else %}
+                <a href="?page={{ i }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+        <a href="?page={{ courses.paginator.num_pages }}">&raquo;</a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}

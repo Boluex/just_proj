@@ -657,3 +657,53 @@ def user_course_list(request):
 
     else:
         return render(request, "course/user_course_list.html")
+    
+
+
+    
+#get the list of students that took a specific course
+# def lecturer_course_list(request):
+#     if request.user.is_lecturer:
+#          get_lecturer_course=CourseAllocation.objects.filter(lecturer=request.user)
+
+#          for courses in get_lecturer_course:
+#              get_course_id=courses.courses.pk
+#              course_taken_by_student=TakenCourse.objects.filter(course=get_course_id)
+
+#          return render(request,'course/student_course_list',{'student':course_taken_by_student})
+    
+from django.shortcuts import render
+
+def lecturer_course_list(request):
+    if request.user.is_lecturer:
+        get_lecturer_courses = CourseAllocation.objects.filter(lecturer=request.user)
+        students = []
+
+        for course_allocation in get_lecturer_courses:
+            course_taken_by_student = TakenCourse.objects.filter(course__in=course_allocation.courses.all())
+            students.extend(course_taken_by_student)
+
+        return render(request, 'course/student_course_list.html', {'students': students,'lecturers':get_lecturer_courses})
+
+    
+
+def remove_student(request,username,course_id):
+    get_lecturer_course= CourseAllocation.objects.get(courses=course_id)
+
+    get_user=User.objects.get(username=username)
+    get_student=TakenCourse.objects.get(course=get_lecturer_course.courses,student=get_user)
+    get_student.delete()
+    messages.success(request,f'You removed {username} from this course')
+    return redirect('enrolled_student')
+    
+
+
+def add_student(request):
+    username=request.POST.get('username')
+    course_id=request.POST.get('id')
+    print(course_id)
+    get_lecturer_course= CourseAllocation.objects.get(courses=course_id)
+    get_user=User.objects.get(username=username)
+    save_user=TakenCourse.objects.create(course=get_lecturer_course.courses,student=get_user)
+    messages.success(request,f'{username} successfully added to the course')
+    return redirect('enrolled_student')

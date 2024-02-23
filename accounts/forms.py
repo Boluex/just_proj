@@ -379,5 +379,9 @@ class EmailValidationOnForgotPassword(PasswordResetForm):
             msg = "There is no user registered with the specified E-mail address. "
             self.add_error("email", msg)
             return email
+        
+
+
+
 
 
