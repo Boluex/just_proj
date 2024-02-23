@@ -27,8 +27,6 @@ def validate_username(request):
 def lecturer_register(request):
     if request.method == "POST":
         form = StaffAddForm(request.POST)
-        user=request.user
-        logout(request,user)
         if form.is_valid():
             form.save()
             messages.success(request, f"Account created successfuly.")
@@ -45,8 +43,6 @@ def lecturer_register(request):
 def student_register(request):
     if request.method == "POST":
         form = StudentAddForm(request.POST)
-        user=request.user
-        logout(request,user)
         if form.is_valid():
             form.save()
             messages.success(request, f"Account created successfuly.")

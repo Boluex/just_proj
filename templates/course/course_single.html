@@ -35,10 +35,14 @@
             <a class="btn btn-sm btn-primary" href="{% url 'check_feedbacks' course.pk %}"><i class="fas fa-plus"></i>
                 Feedbacks
             </a>
+            <a class="btn btn-sm btn-primary" href="{% url 'enrolled_student'  %}"><i class="fas fa-plus"></i>
+                Enrolled Student
+            </a>
             {% else %}
             <a class="btn btn-sm btn-primary" href="{% url 'feedback' course.pk %}"><i class="fas fa-plus"></i>
                 Your feedback
             </a>
+           
     
             {% endif %}
         </div>

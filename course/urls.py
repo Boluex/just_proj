@@ -20,7 +20,11 @@ urlpatterns = [
     path("<int:pk>/course/add/", course_add, name="course_add"),
     path("course/<slug>/edit/", course_edit, name="edit_course"),
     path("course/delete/<slug>/", course_delete, name="delete_course"),
+    
     # CourseAllocation urls
+    path("enrolled_student/",lecturer_course_list,name='enrolled_student'),
+    path('remove_students/<str:username>/<int:course_id>/',remove_student,name='remove_student'),
+    path('add_student/',add_student,name='add_student'),
     path(
         "course/assign/", CourseAllocationFormView.as_view(), name="course_allocation"
     ),
