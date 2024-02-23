@@ -7,11 +7,15 @@
   .form-check{
     margin: 1.5rem 0rem;
   }
+  .signup{
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
 
 </style>
 <div class="col-md-4 mx-auto mt-5">
   <div class="card">
-    <div  class="form-title2">
+    <div  class="form-title">
       <i class="fas fa-lock me-2"></i>
       <div id="form-title">Sign in</div>
     </div>
@@ -30,7 +34,7 @@
               type="text"
               name="username"
               id="username_id"
-              class="control"
+              class="form-control"
               required
             />
             <div id="message-wrapper"></div>
@@ -54,7 +58,7 @@
           ><br />
           {% endif %}
   
-          <div class="btn-group" style="margin-right: 10px">
+          <div class="btn-group signup" style="margin-right: 10px;">
             <button type="submit" class="btn btn-secondary" id="login-btn">
               <i class="fas fa-sign-in-alt"></i> <small>SIGN IN</small>
             </button>
