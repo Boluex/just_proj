@@ -490,6 +490,10 @@ a {
 .form-title2 i {
   margin-right: 8px;
 }
+.form-title2 .control {
+  display: inline-block;
+  background-color: #303f9f;
+}
 
 .news {
   background: linear-gradient(40deg, #45cafc, #303f9f) !important;
