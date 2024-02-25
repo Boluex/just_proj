@@ -32,14 +32,14 @@
             <a class="btn btn-sm btn-primary" href="{% url 'course_allocation' %}"><i class="fas fa-plus"></i>
                 Add Lecturers
             </a>
-            <a class="btn btn-sm btn-primary" href="{% url 'check_feedbacks' course.pk %}"><i class="fas fa-plus"></i>
+            <a class="btn btn-sm btn-primary" href="{% url 'check_feedbacks' course.pk %}"> <i class="fas fa-check"></i>
                 Feedbacks
             </a>
-            <a class="btn btn-sm btn-primary" href="{% url 'enrolled_student'  %}"><i class="fas fa-plus"></i>
+            <a class="btn btn-sm btn-primary" href="{% url 'enrolled_student'  %}"><i class="fas fa-user-graduate"></i>
                 Enrolled Student
             </a>
             {% else %}
-            <a class="btn btn-sm btn-primary" href="{% url 'feedback' course.pk %}"><i class="fas fa-plus"></i>
+            <a class="btn btn-sm btn-primary" href="{% url 'feedback' course.pk %}"> <i class="fas fa-comment"></i>
                 Your feedback
             </a>
            

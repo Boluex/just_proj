@@ -5,29 +5,35 @@
 		background-size: cover;
 		background-position: top center;
 	}
-	.settings, .settings2{
+	.settings, .settings2, .settings1{
 		position: relative;
 	}
 	
-	.settings-child, .submenu  {
+	.settings-child, .submenu, .settings1-child   {
 		display: none;
 		position: absolute;
 		top: 100%;
 		border-radius: .5rem;
 		left: 2rem;
 		z-index: 10000;
-		background-color: #fff; /* Background color for the dropdown */
+		background-color: #d8d8d8; /* Background color for the dropdown */
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for a subtle effect */
 	}
 	.submenu {
-		width: 120%;
+		width: 160%;
 	}
 	.settings-child{
 		position: absolute;
 		width: 170%;
 		left: -4rem;
 	}
-	.settings:hover .settings-child, .settings2:hover .submenu{
+	.settings1{
+		width: 100%;
+	}
+	.submenu1 {
+		width: 100%;
+	}
+	.settings:hover .settings-child, .settings:hover .submenu, .settings1:hover .settings1-child{
 		display: block;
 	}
 	.nav-link li {
@@ -40,6 +46,17 @@
 	.soft{
 		margin: .5rem;
 	}
+	 .caret {
+    border-top: 6px solid;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+	margin-left: .5rem;
+	}
+	.caret {
+    color: #333; 
+    font-size: 12px; 
+	}
+
 </style>
 
 <div id="side-nav">
@@ -92,23 +109,28 @@
 			{% endif %}
 
 			{% if request.user.is_lecturer or request.user.is_student %}
-			<li class="{% if request.path == filt %}active{% endif %}">
-				<a href="{% url 'filter_messages' %}"><i class="fas fa-solid fa-bell"></i>Messages</a>
+			<li class="settings">
+				<a href="#"><i class="fas fa-comment-dots"></i>Chat<b class="caret"></b></a>
+				
+				<ul class="submenu">
+					<li class="{% if request.path == filt %}active{% endif %} soft">
+						<a href="{% url 'filter_messages' %}"><i class="fas fa-solid fa-bell"></i>Messages</a>
+					</li>
+					<li class="{% if request.path == act %}active{% endif %} soft">
+						<a href="{% url 'active_users' %}"><i class="fas fa-solid fa-message"></i>Send Message</a>
+					</li>
+				</ul>
 			</li>
 			{% endif %}
-			{% if request.user.is_lecturer or request.user.is_student %}
-			<li class="{% if request.path == act %}active{% endif %}">
-				<a href="{% url 'active_users' %}"><i class="fas fa-solid fa-message"></i>Send Message</a>
-			</li>
-			{% endif %}
+			
 			{% if request.user.is_lecturer or request.user.is_student %}
 			<li class="{% if request.path == ucl %}active{% endif %}">
 				<a href="{% url 'user_course_list' %}"><i class="fas fa-book"></i>My Courses</a>
 			</li>
 			{% endif %}
-			<li class="settings2">
-				<a href="#"><i class="fas fa-book-open"></i> Academic Management</a>
-				<ul class="submenu">
+			<li class="settings">
+				<a href="#"><i class="fas fa-book-open"></i> Academic Management<b class="caret"></b></a>
+				<ul class="submenu submenu1">
 					<li class="{% if request.path == pro %}active{% endif %} soft">
 						<a href="{% url 'programs' %}"><i class="fas fa-book"></i>Programs & Courses</a>
 					</li>
@@ -137,7 +159,7 @@
 			</li>
 			{% endif %}
 			<li class="settings">
-				<a href="#"><i class="fas fa-cogs"></i>Settings</a>
+				<a href="#"><i class="fas fa-cogs"></i>Settings<b class="caret"></b></a>
 				<ul class="settings-child">
 					<li class="{% if request.path == ep %}active{% endif %} soft">
 						<a href="{% url 'edit_profile' %}"><i class="fas fa-user-cog"></i>Account Setting</a>
