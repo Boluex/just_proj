@@ -5,8 +5,23 @@
 		left: -1rem;
 		top: 0.3rem;
 	}
+	/* .index{
+		position: relative;
+		right: 0;
+
+	}
+	.top-navbar{
+		z-index: 1000;
+		background-color: bisque;
+	} */
+	.index-child {
+		position: absolute;
+		z-index: 1000000;
+		background-color: rgb(201, 201, 201);
+	}
+	
 </style>
-<div id="top-navbar" class="py-2">
+<div id="top-navbar" class="py-2 top-navbar">
 	<div class="container">
 		<a href="/" class="head-logo">
 			<img src="{% static 'img/swy e-learning.jpg' %}" width="40px" alt="swy e-learning">
@@ -20,11 +35,11 @@
 				</button>
 			</form>
 
-			<div class="dropdown">
+			<div class="dropdown index">
 				<div class="avatar border border-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 					<img src="{{ request.user.picture.url }}">
 				</div>
-				<div class="dropdown-menu" style="min-width: 14rem !important;">
+				<div class="dropdown-menu index-child " style="min-width: 14rem !important;">
 					<div class="d-flex flex-column align-items-center">
 						<div class="avatar avatar-md border">
 							<img src="{{ request.user.picture.url }}">
