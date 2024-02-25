@@ -1,11 +1,17 @@
-<div id="top-navbar" class="py-1">
+{% load static %}
+<style>
+	.head-logo{
+		position: absolute;
+		left: -1rem;
+		top: 0.3rem;
+	}
+</style>
+<div id="top-navbar" class="py-2">
 	<div class="container">
+		<a href="/" class="head-logo">
+			<img src="{% static 'img/swy e-learning.jpg' %}" width="40px" alt="swy e-learning">
+		</a>
 		<div class="nav-wrapper">
-
-			<div class="toggle-btn" onclick="toggleSidebar()">
-				<i class="fas fa-bars"></i>
-			</div>
-
 			<form class="form-header" action="{% url 'query' %}" method="GET">
 				<input id="primary-search" class="form-control rounded-end-0" type="text" name="q" value="{{ request.GET.q }}"
 					placeholder="Search All... #lecturers, #students, #course, #program, #News, #Events" required />
