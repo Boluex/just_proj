@@ -24,4 +24,5 @@ django-jet-reboot==1.3.5
 python-decouple==3.8
 channels
 daphne
-
+channels_redis
+django-redis

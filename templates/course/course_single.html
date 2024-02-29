@@ -35,7 +35,7 @@
             <a class="btn btn-sm btn-primary" href="{% url 'check_feedbacks' course.pk %}"> <i class="fas fa-check"></i>
                 Feedbacks
             </a>
-            <a class="btn btn-sm btn-primary" href="{% url 'enrolled_student'  %}"><i class="fas fa-user-graduate"></i>
+            <a class="btn btn-sm btn-primary" href="{% url 'enrolled_student' course.pk  %}"><i class="fas fa-user-graduate"></i>
                 Enrolled Student
             </a>
             {% else %}

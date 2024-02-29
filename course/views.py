@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django_filters.views import FilterView
 from django.db.models import Q
-
+from django.http import HttpResponse
 from accounts.models import User, Student
 from core.models import Session, Semester
 from course.models import TakenCourse
@@ -37,7 +37,9 @@ class ProgramFilterView(FilterView):
         context["title"] = "Programs"
         return context
 
-
+#####################################################################################################
+# Admin can only create,edit and delete programs
+#####################################################################################################
 @login_required
 @lecturer_required
 def program_add(request):
@@ -127,20 +129,18 @@ def program_delete(request, pk):
 
 # ########################################################
 # Course views
+# Lecturer and admins can create program courses
 # ########################################################
 @login_required
 def course_single(request, slug):
     course = Course.objects.get(slug=slug)
-    # print(course.semester)
     files = Upload.objects.filter(course__slug=slug)
     videos = UploadVideo.objects.filter(course__slug=slug)
 
     
-    # lecturers = User.objects.filter(allocated_lecturer__pk=course.id)
+
     lecturers = CourseAllocation.objects.filter(courses__pk=course.id).first()
     all_lecturers=CourseAllocation.objects.filter(courses__pk=course.id)
-    # for lect in all_lecturers:
-    #     print(lect)
 
   
 
@@ -190,8 +190,7 @@ def course_add(request, pk):
                 course_allocate_user = CourseAllocation(lecturer=request.user, session=new_session)
                 course_allocate_user.save()
             
-                # Add the course to the CourseAllocation instance
-                # course_allocate_user.courses.add(get_course_model)
+                
             
             messages.success(
                 request, (course_name + "(" + course_code + ")" + " has been created.")
@@ -218,11 +217,11 @@ def course_add(request, pk):
 
 
 
-
+#####################################################################################################
+# Students can leave feedbacks to courses but only the lecturer that can delete them
+#####################################################################################################
 @login_required
-# @lecturer_required
 def course_feedback(request, pk):
-    # users = User.objects.all()
     if request.method == "POST":
         form = CourseAddFeedback(request.POST)
         get_course=Course.objects.get(id=pk)
@@ -272,7 +271,9 @@ def delete_feedbacks(request,id):
 
 
 
-
+#####################################################################################################
+# Lecturers and admin can edit and delete their courses
+#####################################################################################################
 @login_required
 @lecturer_required
 def course_edit(request, slug):
@@ -314,11 +315,11 @@ def course_delete(request, slug):
     return redirect("program_detail", pk=course.program.pk)
 
 
-# ########################################################
 
 
+
 # ########################################################
-# Course Allocation
+# Lecturers who create a specific course gets the course allocated to them and admin can also allocate course to othe lecturers
 # ########################################################
 @method_decorator([login_required], name="dispatch")
 class CourseAllocationFormView(CreateView):
@@ -331,13 +332,11 @@ class CourseAllocationFormView(CreateView):
         return kwargs
 
     def form_valid(self, form):
-        # if a staff has been allocated a course before update it else create new
         lecturer = form.cleaned_data["lecturer"]
         selected_courses = form.cleaned_data["courses"]
         courses = ()
         for course in selected_courses:
             courses += (course.pk,)
-        # print(courses)
 
         try:
             a = CourseAllocation.objects.get(lecturer=lecturer)
@@ -384,7 +383,11 @@ def edit_allocated_course(request, pk):
         {"title": "Edit Course Allocated", "form": form, "allocated": pk},
     )
 
-
+#####################################################################################################
+# Admin and lecturers can remove other lecturers from a course...
+# Note:Only the lecturer that created the course and the admin
+# that can add and delete other lecturers
+#####################################################################################################
 @login_required
 @lecturer_required
 def deallocate_course(request, pk):
@@ -524,11 +527,9 @@ def handle_video_delete(request, slug, video_slug):
     return redirect("course_detail", slug=slug)
 
 
-# ########################################################
-
 
 # ########################################################
-# Course Registration
+#Students Course Registration
 # ########################################################
 @login_required
 @student_required
@@ -608,7 +609,9 @@ def course_registration(request):
         }
         return render(request, "course/course_registration.html", context)
 
-
+#####################################################################################################
+# Students can drop specific courses
+#####################################################################################################
 @login_required
 @student_required
 def course_drop(request):
@@ -627,15 +630,16 @@ def course_drop(request):
         return redirect("course_registration")
 
 
-# ########################################################
 
 
+#####################################################################################################
+# Students can see courses they enroll to,while lecturers can see the courses they created
+#####################################################################################################
 @login_required
 def user_course_list(request):
     if request.user.is_lecturer:
         courses = Course.objects.filter(allocated_course__lecturer__pk=request.user.id).order_by('-pk')
         all_courses=Course.objects.all().order_by('-pk')
-        # courses=CourseAllocation.objects.filter(lecturer=request.user)
 
         return render(request, "course/user_course_list.html", {"courses": courses,"all_courses":all_courses})
 
@@ -652,7 +656,7 @@ def user_course_list(request):
         return render(
             request,
             "course/user_course_list.html",
-            {"student": student, "taken_courses": taken_courses, "courses": courses,"courses": courses,"all_courses":all_courses},
+            {"student": student, "taken_courses": taken_courses,"courses": courses,"all_courses":all_courses},
         )
 
     else:
@@ -660,50 +664,68 @@ def user_course_list(request):
     
 
 
-    
-#get the list of students that took a specific course
-# def lecturer_course_list(request):
-#     if request.user.is_lecturer:
-#          get_lecturer_course=CourseAllocation.objects.filter(lecturer=request.user)
-
-#          for courses in get_lecturer_course:
-#              get_course_id=courses.courses.pk
-#              course_taken_by_student=TakenCourse.objects.filter(course=get_course_id)
-
-#          return render(request,'course/student_course_list',{'student':course_taken_by_student})
-    
-from django.shortcuts import render
-
-def lecturer_course_list(request):
+#################################################################################################################
+# Lecturer can see students that enroll in his/her course
+#####################################################################################################
+def lecturer_course_list(request,course_id):
     if request.user.is_lecturer:
         get_lecturer_courses = CourseAllocation.objects.filter(lecturer=request.user)
         students = []
 
         for course_allocation in get_lecturer_courses:
             course_taken_by_student = TakenCourse.objects.filter(course__in=course_allocation.courses.all())
+            course_id=course_allocation.pk
+            print(course_id)
             students.extend(course_taken_by_student)
+        return render(request, 'course/student_course_list.html', {'students': students,'lecturers':get_lecturer_courses,'course_id':course_id})
 
-        return render(request, 'course/student_course_list.html', {'students': students,'lecturers':get_lecturer_courses})
+#################################################################################################################
+# Lecturer can remove student from specfic courses
+#####################################################################################################
+def remove_student(request, username, course_id):
+    course = get_object_or_404(Course, id=course_id)
 
-    
+    get_lecturer_course = get_object_or_404(CourseAllocation, courses=course)
 
-def remove_student(request,username,course_id):
-    get_lecturer_course= CourseAllocation.objects.get(courses=course_id)
 
-    get_user=User.objects.get(username=username)
-    get_student=TakenCourse.objects.get(course=get_lecturer_course.courses,student=get_user)
+    user = get_object_or_404(User, username=username)
+
+    student = get_object_or_404(Student, student=user)
+
+    get_student = get_object_or_404(TakenCourse, course=course, student=student)
     get_student.delete()
-    messages.success(request,f'You removed {username} from this course')
-    return redirect('enrolled_student')
-    
+
+    messages.success(request, f'You removed {username} from this course')
+    return redirect('enrolled_student',course_id=course_id)
 
 
-def add_student(request):
-    username=request.POST.get('username')
-    course_id=request.POST.get('id')
-    print(course_id)
-    get_lecturer_course= CourseAllocation.objects.get(courses=course_id)
-    get_user=User.objects.get(username=username)
-    save_user=TakenCourse.objects.create(course=get_lecturer_course.courses,student=get_user)
-    messages.success(request,f'{username} successfully added to the course')
-    return redirect('enrolled_student')
+
+#################################################################################################################
+# Lecturer can add student to specfic courses
+#####################################################################################################
+def add_student(request, course_id):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+
+        # Get the CourseAllocation object based on the course_id
+        course_allocation = get_object_or_404(CourseAllocation, pk=course_id)
+
+        # Get the courses associated with the CourseAllocation
+        courses = course_allocation.courses.all()
+
+        # Get the Student object based on the username
+        student = get_object_or_404(Student, student__username=username)
+
+        # Check if the student is already enrolled in any of the courses
+        if TakenCourse.objects.filter(course__in=courses, student=student).exists():
+            messages.warning(request, f'{username} is already enrolled in one of these courses.')
+            return redirect('enrolled_student', course_id=course_id)
+        
+        # Add the student to each course
+        for course in courses:
+            TakenCourse.objects.create(course=course, student=student)
+        
+        messages.success(request, f'{username} successfully added to the courses.')
+        return redirect('enrolled_student', course_id=course_id)
+    else:
+        return HttpResponse('Not a POST method')

@@ -14,55 +14,38 @@ def generate_room_name(name1, name2):
     return str(name1 + name2)
 
 
-
-
 # def filter_messages(request):
-#     chat_user1 = Chat.objects.filter(user1=request.user).first()
-#     chat_user2 = Chat.objects.filter(user2=request.user).first()
-
-#     if chat_user1 is None and chat_user2 is None:
-#         # Handle the case where no chat room is found for the user
-#         return render(request, 'chat/message_list.html')
-
-#     get_room = None
-#     if chat_user1 is not None and chat_user2 is not None:
-#         # If the user has two chat rooms, choose one
-#         get_room = chat_user1 if chat_user1 == chat_user2 else chat_user1
-#     elif chat_user1 is not None:
-#         get_room = chat_user1
-#     else:
-#         get_room = chat_user2
-
-#     get_message = Message.objects.filter(chat=get_room).order_by('-id')
-#     return render(request, 'chat/message_list.html', {'messages': get_message})
-
-
-# def filter_messages(request):
-#     user_chatrooms = Chat.objects.filter(Q(user1=request.user) | Q(user2=request.user))
+#     user_chatrooms = Chat.objects.filter(user1=request.user).order_by('-id') | Chat.objects.filter(user2=request.user).order_by('-id')
 #     if not user_chatrooms.exists():
-#         return render(request, 'chat/message_list.html')
+#         return render(request, 'chat/message_detail.html')
 
-#     get_room = user_chatrooms.first()
+#     latest_messages = {}
+#     for chatroom in user_chatrooms:
+#         latest_message = Message.objects.filter(chat=chatroom).order_by('-timestamp').first()
+#         if latest_message:
+#             latest_messages[chatroom] = latest_message
 
-#     messages = Message.objects.filter(chat=get_room).order_by('-id')
-#     return render(request, 'chat/message_list.html', {'messages': messages})
+#     return render(request, 'chat/message_detail.html', {'latest_messages': latest_messages})
+
+
+from django.db.models import Max
 
 def filter_messages(request):
     user_chatrooms = Chat.objects.filter(user1=request.user) | Chat.objects.filter(user2=request.user)
     if not user_chatrooms.exists():
-        return render(request, 'chat/message_list.html')
+        return render(request, 'chat/message_detail.html')
+
+    user_chatrooms = user_chatrooms.annotate(max_timestamp=Max('messages__timestamp'))
+
+    user_chatrooms = user_chatrooms.order_by('-max_timestamp')
 
     latest_messages = {}
     for chatroom in user_chatrooms:
-        latest_message = Message.objects.filter(chat=chatroom).order_by('-timestamp').first()
+        latest_message = chatroom.messages.order_by('-timestamp').first()
         if latest_message:
             latest_messages[chatroom] = latest_message
 
     return render(request, 'chat/message_detail.html', {'latest_messages': latest_messages})
-
-
-
-
 
 
 

@@ -15,16 +15,17 @@
     <div class="title-1">Enrolled Student</div>
     <div class="table-shadow">
          <div class="p-3">
-                <form action="{% url 'add_student' %}" method="POST">{% csrf_token %}
+            
+                <form action="{% url 'add_student' course_id  %}" method="POST">{% csrf_token %}
                         <div class="form-group">
                             <input  type="text" name="username" placeholder="Add a student" >
-                            <input type="hidden" name="id" value="{{student.course.pk}}" >
-
+                            
                         </div>
         
 
                     <input class="btn btn-outline-primary" type="submit" value="Add">
                 </form>
+        
             </div>
         <table class="table table-light">
             <thead>
@@ -54,7 +55,7 @@
                                 </button>
                                 <div class="dropdown-menu position-fixed">
                                     <a class="dropdown-item" href="{% url 'remove_student' student.student.student.username student.course.pk  %}">
-                                        <i class="fas fa-trash-alt"></i> Delete
+                                        <i class="fas fa-trash-alt"></i> Remove
                                     </a>
                                 </div>
                             </div>
