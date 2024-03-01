@@ -12,6 +12,9 @@ urlpatterns = [
         "jet/dashboard/", include("jet.dashboard.urls", "jet-dashboard")
     ),  # Django JET dashboard URLS
     path("", include("core.urls")),
+    path('course_api/',include('course.api.urls')),
+    path('core_api/',include('core.api.urls')),
+    path('accounts_api/',include('accounts.api.urls')),
     path("accounts/", include("accounts.urls")),
     path("programs/", include("course.urls")),
     path("search/", include("search.urls")),
