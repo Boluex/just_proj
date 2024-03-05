@@ -19,11 +19,11 @@
                 <form action="{% url 'add_student' course_id  %}" method="POST">{% csrf_token %}
                         <div class="form-group">
                             <input  type="text" name="username" placeholder="Add a student" >
-                            
+                            <input class="btn btn-outline-primary" type="submit" value="Add">
                         </div>
         
 
-                    <input class="btn btn-outline-primary" type="submit" value="Add">
+                   
                 </form>
         
             </div>
