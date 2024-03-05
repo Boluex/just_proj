@@ -675,7 +675,6 @@ def lecturer_course_list(request,course_id):
         for course_allocation in get_lecturer_courses:
             course_taken_by_student = TakenCourse.objects.filter(course__in=course_allocation.courses.all())
             course_id=course_allocation.pk
-            print(course_id)
             students.extend(course_taken_by_student)
         return render(request, 'course/student_course_list.html', {'students': students,'lecturers':get_lecturer_courses,'course_id':course_id})
 

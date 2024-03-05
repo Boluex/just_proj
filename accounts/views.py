@@ -41,7 +41,7 @@ def lecturer_register(request):
         form = StaffAddForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request,'Kindly login')
+            messages.success(request,'Kindly login,account creation successful')
             return redirect('/')
         else:
             messages.error(

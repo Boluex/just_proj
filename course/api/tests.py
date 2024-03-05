@@ -11,7 +11,7 @@ class AllProgramsViewTest(APITestCase):
         self.program2 = Program.objects.create(title="Program 2", summary="Summary 2")
 
     def test_list_all_programs_authenticated(self):
-        url = reverse('list_all_programs')  # Use reverse to generate the correct URL
+        url = reverse('list_all_programs')  
 
         self.client.login(username='admin', password='admin123')
 
