@@ -39,18 +39,30 @@
 </style>
 
 <div class="card p-3" style="box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3); border-radius: 10px;">
+    <h4><b>Active Lecturers</b></h4>
     {% for lecturer in lecturers %}
-           <h4><b>Active Lecturers</b></h4>
            {% if lecturer.is_authenticated %}
             <div class="col-12 class-item">
-                <!-- <p><b>Program of</b> {{ object }}</p> -->
                 <h4>{{ lecturer.username }}</b></h4>
                 <a href="{% url 'room' lecturer.username %}"> Send Message </a>
             </div><hr>
             {% else %}
             <div class="col-12 class-item">
-                <!-- <p><b>Program of</b> {{ object }}</p> -->
                 <h4>{{ lecturer.username }}</b></h4>
+                
+            </div><hr>
+            {% endif %}
+    {% endfor %}
+    <h4><b>Active Students</b></h4>
+    {% for student in students %}
+           {% if student.is_authenticated %}
+            <div class="col-12 class-item">
+                <h4>{{ student.username }}</b></h4>
+                <a href="{% url 'room' student.username %}"> Send Message </a>
+            </div><hr>
+            {% else %}
+            <div class="col-12 class-item">
+                <h4>{{ student.username }}</b></h4>
                 
             </div><hr>
             {% endif %}

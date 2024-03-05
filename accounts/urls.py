@@ -15,12 +15,15 @@ from .views import (
     delete_student,
     validate_username,
     lecturer_register,
-    student_register
+    student_register,
+    sign_in
+    
 )
 
 
 urlpatterns = [
     path("", include("django.contrib.auth.urls")),
+    path("login/",sign_in,name='login'),
     path("admin_panel/", admin_panel, name="admin_panel"),
     path("profile/", profile, name="profile"),
     path("profile/<int:id>/detail/", profile_single, name="profile_single"),

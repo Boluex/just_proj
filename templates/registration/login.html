@@ -24,15 +24,14 @@
       <div id="login-form-container">
         <form action="" method="POST" id="login-form">
           {% csrf_token %}
-          <!-- ... (your existing login form HTML) ... -->
           
           <div class="form-group mb-3">
             <label class="mb-2" for="username_id"
-              ><i class="fas fa-address-card me-2"></i>ID Number</label
+              ><i class="fas fa-address-card me-2"></i>Email</label
             >
             <input
               type="text"
-              name="username"
+              name="email"
               id="username_id"
               class="form-control"
               required
@@ -74,11 +73,9 @@
         </div>
       </div>
 
-      <!-- Create Account Form (Initially hidden) -->
       <div id="create-account-form-container" >
         <form action="" method="POST" id="create-account-form">
           {% csrf_token %}
-          <!-- ... (your create account form HTML) ... -->
           <div class="form-check">
             <input type="radio" id="lecturer" name="userType" value="lecturer" class="form-check-input" required />
             <label for="lecturer" class="form-check-label">Sign up as a Lecturer</label>
@@ -97,13 +94,11 @@
         </form>
       </div>
       <div id="lecturer-content" style="display: none;">
-        <!-- Content specific to Lecturer -->
         Lecturer Content
       </div>
       
-      <!-- Content for Student -->
       <div id="student-content" style="display: none;">
-        <!-- Content specific to Student -->
+
         Student Content
       </div>
 

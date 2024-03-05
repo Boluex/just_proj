@@ -19,7 +19,7 @@
     .class-item {
         display: block;
         border-left: 4px solid #6cbd45; 
-        padding: 1rem !important;
+        padding: .2rem !important;
         background: #f8f9fa;
         border-radius: 3px;
         box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
@@ -29,32 +29,94 @@
     .class-item a{padding: 2px; color: #343a40; text-decoration: none; transition: .5s;}
     .class-item:hover{
         transform: translateX(15px);
-        background: #6cbd45;
+        background: #9b9b9bcb;
+    }
+    .card-title{
+        margin: 0;
+    }
+    .sender {
+        font-size: 1.1rem;
+    }
+    
+    .flex {
+        display: flex;
+        justify-content: space-between;
     }
     .class-item:hover h4 a {
       color: #fff; }
     .class-item:hover p, .class-item:hover span {
       color: rgb(158, 239, 119); 
     }
+    .timestamp{
+        color: rgb(0, 0, 0) !important;
+        font-size: .8rem;
+    }
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+    .right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .button {
+        padding: .4rem .9rem !important;
+        display: inline-block;
+        background-color:#5a5a6646;
+        border-radius: .5rem;
+        text-decoration: none;
+    }
+    .class-item:hover .button {
+        background-color: #343a40;
+        color: #f8f9fa;
+    }
+    .message {
+        color: rgb(0, 46, 197) !important;
+    }
+    .class-item:hover .message {
+        color: rgb(68, 0, 255) !important;
+    }
+    .icon {
+        background-color: #000000;
+        color: white;
+        padding: 0 !important;
+    }
+    
 </style>
 
 <div class="card p-3" style="box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3); border-radius: 10px;">
              {% for chatroom, latest_message in latest_messages.items %}
-             <div class="col-12 class-item active">
-                <!-- <p><b>Program of</b> {{ object }}</p>  -->
-
-                 
+             <div class="col-12 class-item active">             
                         <div class="card-body">
                             {% if chatroom.user1 == request.user %}
-                                <h5 class="card-title">New Message from {{ chatroom.user2.username }}</h5>
-                                <p class="card-text">Timestamp: {{ latest_message.timestamp }}</p>
-                                <p class="card-text">Content: {{ latest_message.content }}</p>
-                                <a href="{% url 'room' chatroom.user2.username %}"> Reply  Message </a>
+                                <div class="flex">
+                                    <div class="left">
+                                        <h5 class="card-title sender">New Message from {{ chatroom.user2.username }}</h5>
+                                        <p class="card-text message">Content: {{ latest_message.content }}</p>
+                                    </div>
+                                    <div class="right">
+                                        <p class="card-text timestamp">{{ latest_message.timestamp }}</p>
+                                        <a class="button" href="{% url 'room' chatroom.user2.username %}">
+                                            <i class="icon fas fa-reply" style="font-size: 0.8em;"></i> Reply Message
+                                        </a>
+                                    </div>
+                                                
+                                </div>
                             {% else %}
-                                <h5 class="card-title">New Message from {{ chatroom.user1.username }}</h5>
-                                <p class="card-text">Timestamp: {{ latest_message.timestamp }}</p>
-                                <p class="card-text">Content: {{ latest_message.content }}</p>
-                                <a href="{% url 'room' chatroom.user1.username %}"> Reply Message </a>
+                                <div class="flex">
+                                    <div class="left">
+                                        <h5 class="card-title">New Message from {{ chatroom.user1.username }}</h5>
+                                        <p class="card-text message">Content: {{ latest_message.content }}</p>
+                                    </div>
+                                    <div class="right">
+                                        <p class="card-text timestamp">{{ latest_message.timestamp }}</p>
+                                        <a class="button" href="{% url 'room' chatroom.user1.username %}">
+                                            <i class="icon fas fa-reply" style="font-size: 0.8em; padding: .1em;"></i> Reply Message
+                                        </a>
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
             </div><hr>

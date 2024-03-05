@@ -186,7 +186,6 @@ EMAIL_HOST_PASSWORD = ""
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 # DRF setup
@@ -227,21 +226,21 @@ LOGGING = {
 
 # WhiteNoise configuration
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
+AUTHENTICATION_BACKENDS = ['accounts.email_backend.EmailBackend']
 
 ASGI_APPLICATION='config.routing.application'
-# CHANNEL_LAYERS={
-#     'default':{
-#         "BACKEND":"channels.layers.InMemoryChannelLayer"
-#     }
+CHANNEL_LAYERS={
+    'default':{
+        "BACKEND":"channels.layers.InMemoryChannelLayer"
+    }
 
-# }
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
 }
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }

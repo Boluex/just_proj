@@ -74,7 +74,7 @@ class StaffAddForm(UserCreationForm):
         max_length=30,
         widget=forms.TextInput(
             attrs={
-                "type": "text",
+                "type": "email",
                 "class": "form-control",
             }
         ),
@@ -105,8 +105,24 @@ class StaffAddForm(UserCreationForm):
         required=False
     )
 
+
+    def validate_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email__iexact=email, is_active=True).exists():
+            raise forms.ValidationError("Email has taken, try another email address. ")
+        
+    def validate_password(self):
+        password1=self.cleaned_data['password1']
+        password2=self.cleaned_data['password2']
+        if password1 != password2:
+            raise forms.ValidationError('Both password field does not match')
+        return password1
+
     class Meta(UserCreationForm.Meta):
         model = User
+
+    
+  
 
     @transaction.atomic()
     def save(self, commit=True):
@@ -127,26 +143,13 @@ class StaffAddForm(UserCreationForm):
             registration_date = randint(1000,9999)
             generated_username = f"{user.first_name.lower()}{user.last_name.lower()}{registration_date}".replace(" ", "")
 
-        user.username = generated_username
+        user.username = generated_username 
 
-        generated_password = User.objects.make_random_password()
-        user.set_password(generated_password)
+        password = self.cleaned_data.get("password1")
+        user.set_password(password)
 
         if commit:
             user.save()
-
-            # Send email with the generated credentials
-            # send_mail(
-            #     'Your account credentials',
-            #     f'Your username: {generated_username}\nYour password: {generated_password}',
-            #     settings.EMAIL_HOST_USER,
-            #     [user.email],
-            #     fail_silently=False,
-            # )
-            print(generated_username)
-            print(generated_password)
-
-
         return user
 
 
@@ -269,6 +272,13 @@ class StudentAddForm(UserCreationForm):
         email = self.cleaned_data['email']
         if User.objects.filter(email__iexact=email, is_active=True).exists():
             raise forms.ValidationError("Email has taken, try another email address. ")
+        
+    def validate_password(self):
+        password1=self.cleaned_data['password1']
+        password2=self.cleaned_data['password2']
+        if password1 != password2:
+            raise forms.ValidationError('Both password field does not match')
+        return password1
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -284,7 +294,7 @@ class StudentAddForm(UserCreationForm):
         user.phone = self.cleaned_data.get("phone")
         user.address = self.cleaned_data.get("address")
         user.email = self.cleaned_data.get("email")
-
+        
         # Generate a username based on first and last name and registration date
         registration_date = randint(1000,9999)
         generated_username = f"{user.first_name.lower()}{user.last_name.lower()}{registration_date}"
@@ -296,23 +306,12 @@ class StudentAddForm(UserCreationForm):
 
         user.username = generated_username
 
-        generated_password = User.objects.make_random_password()
-        user.set_password(generated_password)
+         
+        password = self.cleaned_data.get("password1")
+        user.set_password(password)
 
         if commit:
             user.save()
-
-            # Send email with the generated credentials
-            # send_mail(
-            #     'Your account credentials',
-            #     f'Your username: {generated_username}\nYour password: {generated_password}',
-            #    settings.EMAIL_HOST_USER,
-            #     [user.email],
-            #     fail_silently=False,
-            # )
-            print(generated_username)
-            print(generated_password)
-
         return user
 
 

@@ -295,7 +295,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
+	<!-- <div class="col-md-3 mb-3 px-2">
 		<div class="card-count p-3">
 			<h3><i class="fas fa-users bg-light-orange"></i></h3>
 			<div class="text-right pl-2">
@@ -303,7 +303,7 @@
 				<h2>{{ course_count }}</h2>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="col-md-3 mb-3 px-2">
 		<div class="card-count p-3">
 			<h3><i class="fas fa-users bg-light-aqua"></i></h3>
@@ -352,7 +352,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3 mb-3 px-2">
+	<!-- <div class="col-md-3 mb-3 px-2">
 		<div class="card-count p-3">
 			<h3><i class="fas fa-users bg-light-red"></i></h3>
 			<div class="text-right">
@@ -369,7 +369,7 @@
 				<h2>{{ females_count }}</h2>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="col-md-3 mb-3 px-2">
 		<div class="card-count p-3">
 			<h3><i class="fas fa-users bg-light-orange"></i></h3>
@@ -394,19 +394,7 @@
 	<div class="col-md-6 p-2">
 		<div class="chart-wrap">
 			<i class="fas fa-expand-alt"></i>
-			<canvas id="traffic"></canvas>
-		</div>
-	</div>
-	<div class="col-md-6 p-2">
-		<div class="chart-wrap">
-			<i class="fas fa-expand-alt"></i>
 			<canvas id="enrollement"></canvas>
-		</div>
-	</div>
-	<div class="col-md-6 p-2">
-		<div class="chart-wrap">
-			<i class="fas fa-expand-alt"></i>
-			<canvas id="students_grade"></canvas>
 		</div>
 	</div>
 	<div class="col-md-6 p-2">
@@ -423,24 +411,6 @@
 	</div>
 </div>
 <br>
-<div class="bg-white p-3">
-	<h5 class="border-bottom pb-2">School Demographics</h5>
-	<div class="row">
-		<div class="col-md-4">
-			<i class="fas fa-expand-alt"></i>
-			<canvas id="gender"></canvas>
-		</div>
-		<div class="col-md-4">
-			<i class="fas fa-expand-alt"></i>
-			<canvas id="ethnicity"></canvas>
-		</div>
-		<div class="col-md-4">
-			<i class="fas fa-expand-alt"></i>
-			<canvas id="language"></canvas>
-		</div>
-	</div>
-</div>
-
 {% endblock content %}
 
 {% block js %}
@@ -450,60 +420,6 @@
 <script>
 	$(document).ready(function () {
 
-		// Setup
-		const labels = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-		];
-		const data = {
-			labels: labels,
-			datasets: [{
-				label: 'Students',
-				backgroundColor: 'rgba(86, 224, 224, 0.5)',
-				borderColor: 'rgb(86, 224, 224)',
-				hoverBorderWidth: 3,
-				data: [0, 10, 5, 2, 20, 30, 45]
-			}, {
-				label: 'Teachers',
-				backgroundColor: 'rgba(253, 174, 28, 0.5)',
-				borderColor: 'rgb(253, 174, 28)',
-				hoverBorderWidth: 3,
-				data: [20, 0, 15, 4, 6, 4, 60],
-			}, {
-				label: 'Admins',
-				backgroundColor: 'rgba(203, 31, 255, 0.5)',
-				borderColor: 'rgb(203, 31, 255)',
-				hoverBorderWidth: 3,
-				data: [85, 30, 34, 20, 20, 55, 45],
-			}, {
-				label: 'Stuffs',
-				backgroundColor: 'rgba(255, 19, 157, 0.5)',
-				borderColor: 'rgb(255, 19, 157)',
-				hoverBorderWidth: 3,
-				data: [45, 75, 70, 80, 20, 30, 90],
-			}]
-		};
-
-		var traffic = document.getElementById('traffic');
-		var chart = new Chart(traffic, {
-			type: 'line',
-			data: data,
-			options: {
-				plugins: {
-					title: {
-						display: true,
-						text: 'Website Traffic',
-						padding: 15
-					}
-				}
-			}
-		});
-
-		// Setup
 		const labelsEnrollment = [
 			'2016',
 			'2017',
@@ -562,89 +478,7 @@
 			}
 		});
 
-		// Average grade setup
-		const labelsGrade = [
-			'2017',
-			'2018',
-			'2019',
-			'2020',
-			'2022',
-		];
-		const dataGrade = {
-			labels: labelsGrade,
-			datasets: [{
-				label: "Comp sci.",
-				backgroundColor: 'rgba(86, 224, 224, 0.5)',
-				borderColor: 'rgb(86, 224, 224)',
-				hoverBorderWidth: 3,
-				data: [0, 10, 5, 2, 20, 30, 45]
-			}, {
-				label: "Civil eng.",
-				backgroundColor: 'rgba(253, 174, 28, 0.5)',
-				borderColor: 'rgb(253, 174, 28)',
-				hoverBorderWidth: 3,
-				data: [20, 0, 15, 4, 6, 4, 60],
-			}, {
-				label: "Architect.",
-				backgroundColor: 'rgba(203, 31, 255, 0.5)',
-				borderColor: 'rgb(203, 31, 255)',
-				hoverBorderWidth: 3,
-				data: [85, 30, 34, 20, 20, 55, 45],
-			}, {
-				label: "Economics",
-				backgroundColor: 'rgba(255, 19, 157, 0.5)',
-				borderColor: 'rgb(255, 19, 157)',
-				hoverBorderWidth: 3,
-				data: [45, 75, 70, 80, 20, 30, 90],
-			}]
-		};
 		
-		var students_grade = document.getElementById('students_grade');
-		var chart = new Chart(students_grade, {
-			type: 'bar',
-			data: dataGrade,
-			options: {
-				plugins: {
-					title: {
-						display: true,
-						text: 'Students average grade (performance)',
-						padding: 20
-					}
-				}
-			}
-		});
-
-		const dataGender = {
-			labels: [
-				'Man',
-				'Women'
-			],
-			datasets: [{
-				label: "Students Gender Dataset",
-				data: [{{ males_count }}, {{ females_count }}],
-				backgroundColor: [
-				'rgb(255, 99, 132)',
-				'rgb(54, 162, 235)'
-				],
-				hoverOffset: 4
-			}]
-		};
-
-		var gender = document.getElementById('gender');
-		var chart = new Chart(gender, {
-			type: 'pie',
-			data: dataGender,
-			options: {
-				plugins: {
-					title: {
-						display: true,
-						text: 'Students Gender',
-						padding: 20
-					}
-				}
-			}
-		});
-
 		const dataQualification = {
 			labels: [
 				'PHD',

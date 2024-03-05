@@ -23,42 +23,63 @@ def validate_username(request):
     data = {"is_taken": User.objects.filter(username__iexact=username).exists()}
     return JsonResponse(data)
 
+
+def sign_in(request):
+    if request.method == 'POST':
+        get_email=request.POST.get('email')
+        get_password=request.POST.get('password')
+        user=authenticate(username=get_email,password=get_password)
+        if user is not None:
+            login(request,user)
+            messages.success(request,f'Welcome {request.user.username}')
+            return redirect('/')
+    return render(request,'registration/login.html')
+
 # Where lecturer can be created from the sign page on the website
 def lecturer_register(request):
     if request.method == "POST":
         form = StaffAddForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, f"Account created successfuly.")
             return redirect('/')
         else:
             messages.error(
-                request, f"Something is not correct, please fill all fields correctly."
+                request, f"Error,kindly fill all fields correctly and make sure all passwords are 8-digit character long"
             )
             return redirect('register_lecturer')
     else:
         form = StaffAddForm(request.POST)
     return render(request, "registration/lecturer_registration.html",{'form':form})
 
+
 def student_register(request):
     if request.method == "POST":
         form = StudentAddForm(request.POST)
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
         if form.is_valid():
-            form.save()
-            messages.success(request, f"Account created successfuly.")
-            return redirect('/')
+            user = form.save()
+
+            Student.objects.create(student=user, level=form.cleaned_data.get("level"), program=form.cleaned_data.get("program"))
+
+            messages.success(
+                request,
+                "Account for " + first_name + " " + last_name + " has been created.",
+            )
+
+            return redirect("/")
         else:
             messages.error(
-                request, f"Something is not correct, please fill all fields correctly."
+                request, f"Error,kindly fill all fields correctly and make sure all passwords are 8-digit character long"
             )
-            return redirect('register_student')
+            return render(request, "registration/student_registration.html",{'form':form})
     else:
-        form = StudentAddForm(request.POST)
-    return render(request, "registration/student_registration.html",{'form':form})
+        form = StudentAddForm()
+        return render(request, "registration/student_registration.html",{'form':form})
 
 
 
-@login_required
+@login_required(login_url='login')
 def profile(request):
     """Show profile of any user that fire out the request"""
     current_session = Session.objects.filter(is_current_session=True).first()
@@ -109,7 +130,7 @@ def profile(request):
         )
 
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def profile_single(request, id):
     """Show profile of any selected user"""
@@ -161,7 +182,7 @@ def profile_single(request, id):
         return render(request, "accounts/profile_single.html", context)
 
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def admin_panel(request):
     return render(
@@ -175,7 +196,7 @@ def admin_panel(request):
 # ########################################################
 # Setting views
 # ########################################################
-@login_required
+@login_required(login_url='login')
 def profile_update(request):
     if request.method == "POST":
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -197,7 +218,7 @@ def profile_update(request):
     )
 
 
-@login_required
+@login_required(login_url='login')
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -222,7 +243,7 @@ def change_password(request):
 # ########################################################
 
 # this is where the admin can add lecturers from his homepage
-@login_required
+@login_required(login_url='login')
 @admin_required
 def staff_add_view(request):
     if request.method == "POST":
@@ -252,8 +273,8 @@ def staff_add_view(request):
 
     return render(request, "accounts/add_staff.html", context)
 
-
-@login_required
+# Admin adding a lecturer
+@login_required(login_url='login')
 @admin_required
 def edit_staff(request, pk):
     instance = get_object_or_404(User, is_lecturer=True, pk=pk)
@@ -279,7 +300,7 @@ def edit_staff(request, pk):
     )
 
 
-@method_decorator([login_required, admin_required], name="dispatch")
+@method_decorator([login_required(login_url='login'), admin_required], name="dispatch")
 class LecturerFilterView(FilterView):
     filterset_class = LecturerFilter
     queryset = User.objects.filter(is_lecturer=True)
@@ -293,7 +314,7 @@ class LecturerFilterView(FilterView):
 
 
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def delete_staff(request, pk):
     lecturer = get_object_or_404(User, pk=pk)
@@ -309,7 +330,7 @@ def delete_staff(request, pk):
 # ########################################################
 # Student views
 # ########################################################
-@login_required
+@login_required(login_url='login')
 @admin_required
 def student_add_view(request):
     if request.method == "POST":
@@ -340,7 +361,7 @@ def student_add_view(request):
     )
 
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def edit_student(request, pk):
     # instance = User.objects.get(pk=pk)
@@ -367,7 +388,7 @@ def edit_student(request, pk):
     )
 
 
-@method_decorator([login_required, admin_required], name="dispatch")
+@method_decorator([login_required(login_url='login'), admin_required], name="dispatch")
 class StudentListView(FilterView):
     filterset_class = StudentFilter
     # queryset = User.objects.filter(is_student=True)
@@ -381,7 +402,7 @@ class StudentListView(FilterView):
         return context
 
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def delete_student(request, pk):
     student = get_object_or_404(Student, pk=pk)

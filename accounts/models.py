@@ -40,7 +40,9 @@ class CustomUserManager(UserManager):
 
 GENDERS = (("M", "Male"), ("F", "Female"))
 
-
+'''
+Upadating the user mode to accept more model fields(is_lecturer,is_student,gender,phone,address,picture)
+'''
 class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_lecturer = models.BooleanField(default=False)

@@ -34,7 +34,7 @@
     </ol>
 </nav>
 
-{% if request.user.is_superuser %}
+{% if request.user.is_superuser or request.user.is_lecturer %}
 <div class="manage-wrap">
     <a class="btn btn-primary" href="{% url 'add_item' %}"><i class="fas fa-plus"></i> Add New Post</a>
 </div>
