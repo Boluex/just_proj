@@ -39,7 +39,7 @@
 </style>
 
 <div class="card p-3" style="box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3); border-radius: 10px;">
-    <h4><b>Active Lecturers</b></h4>
+    <h4><b>Lecturers:</b></h4>
     {% for lecturer in lecturers %}
            {% if lecturer.is_authenticated %}
             <div class="col-12 class-item">
@@ -53,7 +53,7 @@
             </div><hr>
             {% endif %}
     {% endfor %}
-    <h4><b>Active Students</b></h4>
+    <h4><b>Students:</b></h4>
     {% for student in students %}
            {% if student.is_authenticated %}
             <div class="col-12 class-item">

@@ -41,6 +41,7 @@ def lecturer_register(request):
         form = StaffAddForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request,'Kindly login')
             return redirect('/')
         else:
             messages.error(
@@ -62,11 +63,7 @@ def student_register(request):
 
             Student.objects.create(student=user, level=form.cleaned_data.get("level"), program=form.cleaned_data.get("program"))
 
-            messages.success(
-                request,
-                "Account for " + first_name + " " + last_name + " has been created.",
-            )
-
+        
             return redirect("/")
         else:
             messages.error(
@@ -343,10 +340,7 @@ def student_add_view(request):
             # Create a Student instance and associate it with the User
             Student.objects.create(student=user, level=form.cleaned_data.get("level"), program=form.cleaned_data.get("program"))
 
-            messages.success(
-                request,
-                "Account for " + first_name + " " + last_name + " has been created.",
-            )
+    
             # create_student=Student.objects.create()
             return redirect("student_list")
         else:
