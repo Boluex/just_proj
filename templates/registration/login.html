@@ -65,7 +65,7 @@
           </div>
           {% if form.errors %}
           <span class="text-danger"
-            ><i class="fas fa-exclamation-circle"></i> Invalid ID &
+            ><i class="fas fa-exclamation-circle"></i> Invalid Email &
             Password.</span
           ><br />
           {% endif %}
@@ -145,18 +145,17 @@
 </script>
 <script>
   function handleNext() {
-    // Retrieve the selected value from the radio inputs
+  
     const userType = $("input[name='userType']:checked").val();
 
-    // Redirect or perform actions based on the selected user type
     if (userType === 'lecturer') {
-      // Redirect or show content for lecturer registration
+
       window.location.href = '/accounts/register_lecturer/';
     } else if (userType === 'student') {
-      // Redirect or show content for student registration
+    
       window.location.href = '/accounts/register_student/';
     } else {
-      // Handle other cases or provide an error message
+   
       alert('Invalid selection');
     }
   }
