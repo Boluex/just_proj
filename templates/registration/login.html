@@ -35,7 +35,7 @@
       {% endif %}
       <!-- Login Form -->
       <div id="login-form-container">
-        <form action="" method="POST" id="login-form">
+        <form action="{% url 'login' %}" method="POST" id="login-form">
           {% csrf_token %}
           
           <div class="form-group mb-3">

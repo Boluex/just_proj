@@ -16,6 +16,7 @@ from .forms import StaffAddForm, StudentAddForm, ProfileUpdateForm
 from .models import User, Student
 from .filters import LecturerFilter, StudentFilter
 from django.contrib.auth import authenticate,login,logout
+from django.http import HttpResponse
 
 
 def validate_username(request):
@@ -23,17 +24,20 @@ def validate_username(request):
     data = {"is_taken": User.objects.filter(username__iexact=username).exists()}
     return JsonResponse(data)
 
-
 def sign_in(request):
-    if request.method == 'POST':
-        get_email=request.POST.get('email')
-        get_password=request.POST.get('password')
-        user=authenticate(username=get_email,password=get_password)
-        if user is not None:
-            login(request,user)
-            messages.success(request,f'Welcome {request.user.username}')
-            return redirect('/')
-    return render(request,'registration/login.html')
+    # if request.method == 'POST':    
+    #     get_email=request.POST.get('email')
+    #     get_password=request.POST.get('password')
+    #     print(get_email,get_password)
+    #     user=authenticate(username=get_email,password=get_password)
+    #     print(user)
+    #     if user is not None:
+    #         login(request,user)
+    #         messages.success(request,f'Welcome {request.user.username}')
+    #         return redirect('/')
+    # print('not a post method')
+    # return render(request,'registration/login.html')
+    return HttpResponse('It is not working')
 
 # Where lecturer can be created from the sign page on the website
 def lecturer_register(request):
