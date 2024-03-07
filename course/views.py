@@ -27,7 +27,7 @@ from .filters import ProgramFilter, CourseAllocationFilter
 from .models import Program, Course, CourseAllocation, Upload, UploadVideo,Course_feedback
 
 
-@method_decorator([login_required], name="dispatch")
+@method_decorator([login_required(login_url='login')], name="dispatch")
 class ProgramFilterView(FilterView):
     filterset_class = ProgramFilter
     template_name = "course/program_list.html"
@@ -40,7 +40,7 @@ class ProgramFilterView(FilterView):
 #####################################################################################################
 # Admin can only create,edit and delete programs
 #####################################################################################################
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def program_add(request):
     if request.method == "POST":
@@ -66,7 +66,7 @@ def program_add(request):
     )
 
 
-@login_required
+@login_required(login_url='login')
 def program_detail(request, pk):
     program = Program.objects.get(pk=pk)
     courses = Course.objects.filter(program_id=pk).order_by("-year")
@@ -90,7 +90,7 @@ def program_detail(request, pk):
     )
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def program_edit(request, pk):
     program = Program.objects.get(pk=pk)
@@ -113,7 +113,7 @@ def program_edit(request, pk):
     )
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def program_delete(request, pk):
     program = Program.objects.get(pk=pk)
@@ -131,7 +131,7 @@ def program_delete(request, pk):
 # Course views
 # Lecturer and admins can create program courses
 # ########################################################
-@login_required
+@login_required(login_url='login')
 def course_single(request, slug):
     course = Course.objects.get(slug=slug)
     files = Upload.objects.filter(course__slug=slug)
@@ -159,7 +159,7 @@ def course_single(request, slug):
     )
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def course_add(request, pk):
     users = User.objects.all()
@@ -220,7 +220,7 @@ def course_add(request, pk):
 #####################################################################################################
 # Students can leave feedbacks to courses but only the lecturer that can delete them
 #####################################################################################################
-@login_required
+@login_required(login_url='login')
 def course_feedback(request, pk):
     if request.method == "POST":
         form = CourseAddFeedback(request.POST)
@@ -248,7 +248,7 @@ def course_feedback(request, pk):
             "form": form,
         },
     )
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def check_feedbacks(request,id):
     get_course=Course.objects.get(id=id)
@@ -259,7 +259,7 @@ def check_feedbacks(request,id):
     return render(request,'course/course_feedback_list.html',context)
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def delete_feedbacks(request,id):
     get_feedback=Course_feedback.objects.get(pk=id)
@@ -274,7 +274,7 @@ def delete_feedbacks(request,id):
 #####################################################################################################
 # Lecturers and admin can edit and delete their courses
 #####################################################################################################
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def course_edit(request, slug):
     course = get_object_or_404(Course, slug=slug)
@@ -304,7 +304,7 @@ def course_edit(request, slug):
     )
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def course_delete(request, slug):
     course = Course.objects.get(slug=slug)
@@ -321,7 +321,7 @@ def course_delete(request, slug):
 # ########################################################
 # Lecturers who create a specific course gets the course allocated to them and admin can also allocate course to othe lecturers
 # ########################################################
-@method_decorator([login_required], name="dispatch")
+@method_decorator([login_required(login_url='login')], name="dispatch")
 class CourseAllocationFormView(CreateView):
     form_class = CourseAllocationForm
     template_name = "course/course_allocation_form.html"
@@ -353,7 +353,7 @@ class CourseAllocationFormView(CreateView):
         return context
 
 
-@method_decorator([login_required], name="dispatch")
+@method_decorator([login_required(login_url='login')], name="dispatch")
 class CourseAllocationFilterView(FilterView):
     filterset_class = CourseAllocationFilter
     template_name = "course/course_allocation_view.html"
@@ -364,7 +364,7 @@ class CourseAllocationFilterView(FilterView):
         return context
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def edit_allocated_course(request, pk):
     allocated = get_object_or_404(CourseAllocation, pk=pk)
@@ -388,7 +388,7 @@ def edit_allocated_course(request, pk):
 # Note:Only the lecturer that created the course and the admin
 # that can add and delete other lecturers
 #####################################################################################################
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def deallocate_course(request, pk):
     course = CourseAllocation.objects.get(pk=pk)
@@ -403,7 +403,7 @@ def deallocate_course(request, pk):
 # ########################################################
 # File Upload views
 # ########################################################
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def handle_file_upload(request, slug):
     course = Course.objects.get(slug=slug)
@@ -427,7 +427,7 @@ def handle_file_upload(request, slug):
     )
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def handle_file_edit(request, slug, file_id):
     course = Course.objects.get(slug=slug)
@@ -463,7 +463,7 @@ def handle_file_delete(request, slug, file_id):
 # ########################################################
 # Video Upload views
 # ########################################################
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def handle_video_upload(request, slug):
     course = Course.objects.get(slug=slug)
@@ -487,7 +487,7 @@ def handle_video_upload(request, slug):
     )
 
 
-@login_required
+@login_required(login_url='login')
 # @lecturer_required
 def handle_video_single(request, slug, video_slug):
     course = get_object_or_404(Course, slug=slug)
@@ -495,7 +495,7 @@ def handle_video_single(request, slug, video_slug):
     return render(request, "upload/video_single.html", {"video": video})
 
 
-@login_required
+@login_required(login_url='login')
 @lecturer_required
 def handle_video_edit(request, slug, video_slug):
     course = Course.objects.get(slug=slug)
@@ -531,7 +531,7 @@ def handle_video_delete(request, slug, video_slug):
 # ########################################################
 #Students Course Registration
 # ########################################################
-@login_required
+@login_required(login_url='login')
 @student_required
 def course_registration(request):
     if request.method == "POST":
@@ -612,7 +612,7 @@ def course_registration(request):
 #####################################################################################################
 # Students can drop specific courses
 #####################################################################################################
-@login_required
+@login_required(login_url='login')
 @student_required
 def course_drop(request):
     if request.method == "POST":
@@ -635,7 +635,7 @@ def course_drop(request):
 #####################################################################################################
 # Students can see courses they enroll to,while lecturers can see the courses they created
 #####################################################################################################
-@login_required
+@login_required(login_url='login')
 def user_course_list(request):
     if request.user.is_lecturer:
         courses = Course.objects.filter(allocated_course__lecturer__pk=request.user.id).order_by('-pk')

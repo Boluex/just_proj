@@ -17,6 +17,7 @@ from .models import User, Student
 from .filters import LecturerFilter, StudentFilter
 from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponse
+from django.contrib.auth import urls
 
 
 def validate_username(request):
@@ -25,20 +26,19 @@ def validate_username(request):
     return JsonResponse(data)
 
 def sign_in(request):
-    # if request.method == 'POST':    
-    #     get_email=request.POST.get('email')
-    #     get_password=request.POST.get('password')
-    #     print(get_email,get_password)
-    #     user=authenticate(username=get_email,password=get_password)
-    #     print(user)
-    #     if user is not None:
-    #         login(request,user)
-    #         messages.success(request,f'Welcome {request.user.username}')
-    #         return redirect('/')
-    # print('not a post method')
-    # return render(request,'registration/login.html')
-    return HttpResponse('It is not working')
+    if request.method == 'POST':    
+        get_email=request.POST.get('email')
+        get_password=request.POST.get('password')
+        print(get_email,get_password)
+        user=authenticate(username=get_email,password=get_password)
+        print(user)
+        if user is not None:
+            login(request,user)
+            messages.success(request,f'Welcome {request.user.username}')
+            return redirect('/')
+    return render(request,'registration/login.html')
 
+ 
 # Where lecturer can be created from the sign page on the website
 def lecturer_register(request):
     if request.method == "POST":
@@ -301,7 +301,7 @@ def edit_staff(request, pk):
     )
 
 
-@method_decorator([login_required(login_url='login'), admin_required], name="dispatch")
+@method_decorator([login_required(login_url='sign_in'), admin_required], name="dispatch")
 class LecturerFilterView(FilterView):
     filterset_class = LecturerFilter
     queryset = User.objects.filter(is_lecturer=True)
@@ -386,7 +386,7 @@ def edit_student(request, pk):
     )
 
 
-@method_decorator([login_required(login_url='login'), admin_required], name="dispatch")
+@method_decorator([login_required(login_url='sign_in'), admin_required], name="dispatch")
 class StudentListView(FilterView):
     filterset_class = StudentFilter
     # queryset = User.objects.filter(is_student=True)
