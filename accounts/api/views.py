@@ -1,7 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST,HTTP_204_NO_CONTENT
-
+from rest_framework.decorators import authentication_classes,permission_classes
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import AllowAny,IsAuthenticated,IsAdminUser
 from accounts.models import User,Student
 from .serializers import UserSerializer,StudentSerializer
 
@@ -10,6 +12,7 @@ from .serializers import UserSerializer,StudentSerializer
 ##########################################
 @api_view(['POST'])
 def create_user(request):
+    # check the models know what to add as the input field....things like the is_lecturer and is_student fields which is a boolean,and other data
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

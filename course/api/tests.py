@@ -13,7 +13,7 @@ class AllProgramsViewTest(APITestCase):
     def test_list_all_programs_authenticated(self):
         url = reverse('list_all_programs')  
 
-        self.client.login(username='admin', password='admin123')
+        self.client.login(username='admin@gmail.com', password='admin123')
 
         response = self.client.get(url)
 

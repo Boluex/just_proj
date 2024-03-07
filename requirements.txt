@@ -20,7 +20,11 @@ django-jet-reboot==1.3.5
 
 # Environment variable
 python-decouple==3.8
+
+# messaging features
 channels
 daphne
 channels_redis
 django-redis
+
+

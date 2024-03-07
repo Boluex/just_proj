@@ -43,7 +43,7 @@ def get_program_by_id(request, pk):
 @permission_classes([IsAdminUser]) 
 @authentication_classes([BasicAuthentication])
 def get_or_delete_program(request, pk):
-    if not request.user.is_superuser:
+    if not request.user.is_authenticated :
         return Response(status=HTTP_401_UNAUTHORIZED)
 
     try:

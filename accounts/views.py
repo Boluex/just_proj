@@ -29,9 +29,7 @@ def sign_in(request):
     if request.method == 'POST':    
         get_email=request.POST.get('email')
         get_password=request.POST.get('password')
-        print(get_email,get_password)
         user=authenticate(username=get_email,password=get_password)
-        print(user)
         if user is not None:
             login(request,user)
             messages.success(request,f'Welcome {request.user.username}')
