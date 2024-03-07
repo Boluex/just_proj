@@ -15,7 +15,7 @@ from .decorators import admin_required
 from .forms import StaffAddForm, StudentAddForm, ProfileUpdateForm
 from .models import User, Student
 from .filters import LecturerFilter, StudentFilter
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate,login
 from django.http import HttpResponse
 from django.contrib.auth import urls
 
