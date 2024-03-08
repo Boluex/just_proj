@@ -167,6 +167,7 @@ def course_add(request, pk):
         form = CourseAddForm(request.POST)
         course_name = request.POST.get("title")
         course_code = request.POST.get("code")
+        get_semester=request.POST.get('semester')
         if form.is_valid():
             
             form.save()
@@ -176,7 +177,7 @@ def course_add(request, pk):
             if filter_session.exists():
             
                 get_session_model=Session.objects.get(session=get_session_name,is_current_session=True)
-                semester_create,grab=Semester.objects.get_or_create(semester=request.POST.get('semester'),is_current_semester=True,session=get_session_model)
+                semester_create,get=Semester.objects.get_or_create(semester=request.POST.get('semester'),is_current_semester=True,session=get_session_model)
 
                 get_course_model = Course.objects.get(title=course_name, code=course_code)
                 course_allocate_user = CourseAllocation(lecturer=request.user, session=get_session_model)
@@ -189,6 +190,7 @@ def course_add(request, pk):
                 
                 course_allocate_user = CourseAllocation(lecturer=request.user, session=new_session)
                 course_allocate_user.save()
+                course_allocate_user.courses.add(get_course_model)
             
                 
             
